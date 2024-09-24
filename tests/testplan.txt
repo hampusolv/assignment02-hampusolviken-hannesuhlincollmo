@@ -1,0 +1,56 @@
+1 Gå igenom välj 10 testfall ur excell
+
+Kolla om testerna kan förenklas vi har fler än 10
+Vilka är lätta att implementera börja med
+Fundera på om dem är flaky (d.v.s att dem funkar ibland och ibland inte ) se till att undvika att dem är flaky
+
+
+2 strukturera upp filerna/mappstrukturen i din lokala branch
+skapa följande filer under mapp tests
+
+  
+klassefiler en klass= en HTTP Metod med tillhördande metoder. 4 filer totalt (put,delete,get,post)
+Fil med klass för alla testdata metoder från faker
+Fil med variabler med alla URL adresser vi ska använda i testerna börja fylla i alla url adresser där
+Gör .env fil med tomt innehåll och gör kopia på env fil
+Lägg in .env i gitignore filen
+
+
+3 Börja med implementera tester börja med dem mest enkla
+Börja skriv testerna enkelt med mycket kod testa i playwright kolla att dem funkar
+
+   
+Skriv om testerna med mindre kod och börja fylla på innehåll i klassfilerna, testdata för att 
+   testerna ska kunna skrivas med enklare kod.
+
+  
+testa att testerna funkar i playwrighet
+
+   
+när vissa tester funkar gör push bara med själva testfilen från lokal branch till github
+
+
+
+4
+5 Gitignore Fil
+Kolla att Gitignore innehåller rätt innehåll verifiera att rätt saker pushas upp
+
+
+
+6 Merge till Main Github
+    Nån i gruppenn mergar in följande filer från local branch till main 
+
+   
+package.json
+package-lock.json-.gitignore
+playwright.config.ts
+alla klassfiler
+testdata fil
+fil med alla url adress variabler
+gitignore
+
+   Gör fler testare detta blir det merge conflict när vi pushar från local branch till main på github 
+
+   
+Varje testare mergar in sin egen testfil från Local Branch till Main branch innan detta görs spara undan denna fil lokalt 
+   ifall merge inte funkar.
