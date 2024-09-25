@@ -1,26 +1,28 @@
 import { test, expect } from '@playwright/test';
-
-import { ADD_CAR, ADD_CUSTOMER, GET_ALL_CUSTOMERS } from './urlVariable';
-
+import { ADD_CAR, ADD_CUSTOMER, GET_ALL_CUSTOMERS, UPDATE_CUSTOMER, ORDER_CAR,GET_ALL_CARS, DELETE_CAR } from './urlVariable';
 import { APIGETS } from './apiGet';
-
-import { generateFakerDataCreateCar } from './fakerData';
-
+import {
+  generateFakerDataCreateCarWithExistringRegistrationNumber, generateFakerDataUpdateCustomer, generateFakerDataOrderCarFirstUser, generateFakerDataOrderCarSecondUser,
+  generateFakerDataCreateCar
+} from './fakerData';
 import { APIPOSTS } from './apiPost';
-
-import { generateEmptyCustomerSchema } from './EmptyData';
+import { APIPUTS } from './apiPut';
+import { APIDELETE } from './apiDelete';
 
 test.describe('Testsuite Hannes and Hampus Group', () => {
   let apigets: APIGETS;
   let apiposts: APIPOSTS;
+  let apiputs: APIPUTS;
+  let apiDelete:APIDELETE;
 
-  test.beforeAll(async ({  }) => {
-    apigets = new APIGETS(GET_ALL_CUSTOMERS);
-    apiposts = new APIPOSTS(ADD_CAR,ADD_CUSTOMER);
-
+  test.beforeAll(async ({ }) => {
+    apigets = new APIGETS(GET_ALL_CUSTOMERS,GET_ALL_CARS);
+    apiposts = new APIPOSTS(ADD_CAR, ADD_CUSTOMER, ORDER_CAR);
+    apiputs = new APIPUTS(UPDATE_CUSTOMER);
+    apiDelete= new APIDELETE(DELETE_CAR);
   })
 
-  test('Test case 01 find all customers', async ({ request }) => { 
+  test('Test case 01 find all customers', async ({ request }) => {
     const responseAllCustomers = await apigets.getAllCustomers(request);
     expect(responseAllCustomers.ok()).toBeTruthy();
     expect(responseAllCustomers.status()).toBe(200);
@@ -28,26 +30,93 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
     expect(responseAllCustomers.status()).not.toBe(400);
   });
 
-  test('Test case 02 add cars with a registration number that are in the database', async ({ request, }) => { 
-    const payload = generateFakerDataCreateCar();
-    console.log(payload)
-     // print out payload you send to the server url for add car for check paylod object with
-    const responseCreateCar= await apiposts.addCAR(request, payload);
-    // assert that you cant create a new car with a registration number that allready exists expect staus_code 409 
+  test('Test case 02 add cars with a registration number that are in the database', async ({ request, }) => {
+    const payload = generateFakerDataCreateCarWithExistringRegistrationNumber();
+    const responseCreateCar = await apiposts.addCAR(request, payload);
     expect(responseCreateCar.status()).not.toBe(201);
     expect(responseCreateCar.status()).toBe(409);
   });
 
-  test('Test case 03 add a customer without any value', async ({ request, }) => { 
-    const payload = generateEmptyCustomerSchema();
-    console.log(payload)
-     // print out payload you send to the server url for add customer for check paylod object with
-    const responseCreateCustomerWithEmptyData = await apiposts.addCAR(request, payload);
-    // assert that you can`t create a new customer with any information expect 400 and not 201 response. 
-    expect(responseCreateCustomerWithEmptyData.status()).toBe(400);
-    expect(responseCreateCustomerWithEmptyData.status()).not.toBe(201);
-    // test fail you can add a customer with no information. Then the carfirm cant contact customers not god buisness. 
-    
+  test('Test case 03 uppdate a customer and verify changes in customers list', async ({ request, }) => {
+    const payload = generateFakerDataUpdateCustomer();
+    const responseUpdateCustomer = await apiputs.uppdateCustomer(request, payload);
+    expect(await responseUpdateCustomer.json()).toMatchObject(
+      expect.objectContaining({
+        name: payload.name,
+        username: payload.username,
+        address: payload.address,
+        email: payload.email,
+        phoneNumber: payload.phoneNumber,
+        id: payload.id
+      })
+    )
+    const responseAllCustomers = await apigets.getAllCustomers(request);
+    expect(responseAllCustomers.ok()).toBeTruthy();
+    const allCustomers = await responseAllCustomers.json();
+    expect(allCustomers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: payload.name,
+          username: payload.username,
+          address: payload.address,
+          email: payload.email,
+          phoneNumber: payload.phoneNumber,
+          id: payload.id
+        })
+      ])
+    )
+  });
+
+  test('Test case 04 add a customer without any value', async ({ request, }) => {
+    const responseCreateCustomerWithnodata = await apiposts.addCustomerWithEmpytValue(request);
+    expect(responseCreateCustomerWithnodata.status()).toBe(400);
+    expect(responseCreateCustomerWithnodata.status()).not.toBe(201);
+  });
+
+  test('Test case 15 validate customermessage when book a car and then another user book same car', async ({ request, }) => {
+    const payload = generateFakerDataOrderCarFirstUser();
+    const responseordecar = await apiposts.orderCar(request, payload);
+    expect(responseordecar.status()).toBe(200);
+    const responsemessage = await responseordecar.text();
+    expect(responsemessage).toStrictEqual("Booking created successfully");
+    expect(responsemessage).not.toStrictEqual("Car is already booked");
+    const payload2 = generateFakerDataOrderCarSecondUser();
+    const responseordecar2 = await apiposts.orderCar(request, payload2);
+    const responsemessage2 = await responseordecar2.text();
+    expect(responsemessage2).toStrictEqual("Car is already booked");
+  });
+
+  test('Test case 16 create car and take away car from car list', async ({ request }) => {
+    const payload = generateFakerDataCreateCar();
+    const responsecreateCar = await apiposts.addCAR(request, payload);
+    expect(responsecreateCar.status()).toBe(201);
+    expect(responsecreateCar.status()).not.toBe(400);
+    const createcar= await responsecreateCar.json()
+    const carid= createcar.id;
+    const responseallcars= await apigets.getAllCars(request);
+    expect(responseallcars.status()).toBe(200);
+    const allcars = await responseallcars.json();
+    expect(allcars).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          pricePerDay:payload.pricePerDay,
+          fabric: payload.fabric,
+          model: payload.model,
+          registrationNumber: payload.registrationNumber,
+        })
+      ])
+    )
+    const deleteresponselatestcar= await apiDelete.deleteCarWithLatestId(request,carid)
+    expect(deleteresponselatestcar.status()).toBe(200);
+    const uppdatedcarlistresponse=await apigets.getAllCars(request);
+    const uppdatedcarlist= await uppdatedcarlistresponse.json();
+    expect(uppdatedcarlist).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: carid 
+        })
+      ])
+    )
   });
 
 });
