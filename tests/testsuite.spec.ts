@@ -39,6 +39,8 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
     expect(responseAllCustomers.status()).not.toBe(400);
   });
 
+  console.log ("hello")
+
   test('Test case 02 add cars with a registration number that are in the database', async ({ request, }) => { 
     // let apiposts: APIPOSTS;
     // //This line doesn't initialize the variable, just declares that apigets will be of type Class APIPOSTS.
