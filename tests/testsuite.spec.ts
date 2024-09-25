@@ -73,7 +73,7 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
     expect(responseCreateCustomerWithnodata.status()).not.toBe(201);
   });
 
-  test('Test case 15 validate customermessage when book a car and then another user book same car', async ({ request, }) => {
+  test('Test case 5 validate customermessage when book a car and then another user book same car', async ({ request, }) => {
     const payload = generateFakerDataOrderCarFirstUser();
     const responseordecar = await apiposts.orderCar(request, payload);
     expect(responseordecar.status()).toBe(200);
@@ -86,7 +86,7 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
     expect(responsemessage2).toStrictEqual("Car is already booked");
   });
 
-  test('Test case 16 create car and take away car from car list', async ({ request }) => {
+  test('Test case 6 create car and take away car from car list', async ({ request }) => {
     const payload = generateFakerDataCreateCar();
     const responsecreateCar = await apiposts.addCAR(request, payload);
     expect(responsecreateCar.status()).toBe(201);
