@@ -17,7 +17,7 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
     apigets = new APIGETS(GET_ALL_CUSTOMERS, GET_ALL_CARS);
     apiposts = new APIPOST(ADD_CAR, ADD_CUSTOMER, ORDER_CAR);
     apiputs = new APIPUTS(UPDATE_CUSTOMER,UPDATE_CAR);
-    apiDelete = new APIDELETE(DELETE_CAR);
+    apiDelete = new APIDELETE(DELETE_CAR,WRONG_URL);
   })
 
   test('Test case 01 find all customers', async ({ request }) => {
