@@ -6,7 +6,7 @@ export class APIDELETE{
     private DELETE_CAR : string;
     private WRONG_URL : string 
 
-    constructor(DELETE_CAR: string ){
+    constructor(DELETE_CAR: string,WRONG_URL:string){
         this.DELETE_CAR = DELETE_CAR;
         this.WRONG_URL = WRONG_URL;
     }
