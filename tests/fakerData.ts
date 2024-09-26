@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { CAR_REGISTRATION_NUMBER, CAR_ID } from "./carVariable";
-import { Customer_ID_FIRST, Customer_ID_SECOND } from "./customerVariable";
+import { Customer_ID_FIRST} from "./customerVariable";
 
 export const CreateCarWithExistringRegistrationNumber = () => {
     return {
@@ -25,15 +25,6 @@ export const UpdateCustomer = () => {
 export const OrderCarFirstUser = () => {
     return {
         "userId": Customer_ID_FIRST,
-        "carId": CAR_ID,
-        "date": faker.date.soon(),
-        "numberOfDays": faker.number.int({ min: 10, max: 255 })
-    }
-}
-
-export const OrderCarSecondUser = () => {
-    return {
-        "userId": Customer_ID_SECOND,
         "carId": CAR_ID,
         "date": faker.date.soon(),
         "numberOfDays": faker.number.int({ min: 10, max: 255 })

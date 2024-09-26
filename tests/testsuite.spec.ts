@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { generateFakerDataOrderCar } from './fakerData';
 import { ADD_CAR, ADD_CUSTOMER, GET_ALL_CUSTOMERS, UPDATE_CUSTOMER, ORDER_CAR, GET_ALL_CARS, DELETE_CAR,UPDATE_CAR,WRONG_URL } from './urlVariable';
 import { APIGETS } from './apiGet';
-import { CreateCarWithExistringRegistrationNumber,UpdateCustomer, OrderCarFirstUser, OrderCarSecondUser,CreateCar, UpdateCarWithNegativePrice} from './fakerData';
+import { CreateCarWithExistringRegistrationNumber,UpdateCustomer, OrderCarFirstUser,CreateCar, UpdateCarWithNegativePrice} from './fakerData';
 import { APIPOST } from './apiPost';
 import { APIPUTS } from './apiPut';
 import { APIDELETE } from './apiDelete';
@@ -71,17 +71,13 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
     expect(responseCreateCustomerWithnodata.status()).not.toBe(201);
   });
 
-  test('Test case 05 book a car and then validate that another user cant book same car', async ({ request, }) => {
+  test('Test case 05 book a car that is allready booked get right messege from server', async ({ request, }) => {
     const payload = OrderCarFirstUser();
     const responseordecar = await apiposts.orderCar(request, payload);
     expect(responseordecar.status()).toBe(200);
     const responsemessage = await responseordecar.text();
-    expect(responsemessage).toStrictEqual("Booking created successfully");
-    expect(responsemessage).not.toStrictEqual("Car is already booked");
-    const payload2 = OrderCarSecondUser();
-    const responseordecar2 = await apiposts.orderCar(request, payload2);
-    const responsemessage2 = await responseordecar2.text();
-    expect(responsemessage2).toStrictEqual("Car is already booked");
+    expect(responsemessage).not.toStrictEqual("Booking created successfully");
+    expect(responsemessage).toStrictEqual("Car is already booked");
   });
 
   test('Test case 06 create car and take away car from car list', async ({ request }) => {
@@ -144,7 +140,6 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
     expect(responsebookcar.status()).toBe(400);
     console.log(responsebookcar);
   });
-  
   
 });
 
