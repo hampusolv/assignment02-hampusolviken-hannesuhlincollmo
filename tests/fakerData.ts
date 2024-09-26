@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { CAR_REGISTRATION_NUMBER, CAR_ID } from "./carVariable";
+import { CAR_REGISTRATION_NUMBER, CAR_ID_1, CAR_ID_2 } from "./carVariable";
 import { Customer_ID_FIRST} from "./customerVariable";
 
 export const CreateCarWithExistringRegistrationNumber = () => {
@@ -25,7 +25,7 @@ export const UpdateCustomer = () => {
 export const OrderCarFirstUser = () => {
     return {
         "userId": Customer_ID_FIRST,
-        "carId": CAR_ID,
+        "carId": CAR_ID_1,
         "date": faker.date.soon(),
         "numberOfDays": faker.number.int({ min: 10, max: 255 })
     }
@@ -42,7 +42,7 @@ export const CreateCar = () => {
 
 export const UpdateCarWithNegativePrice = () => {
     return {
-        "id": CAR_ID,
+        "id": CAR_ID_2,
         "pricePerDay": faker.number.int({ min: -100, max: -1 }),
         "fabric": faker.lorem.word(5),
         "model": faker.string.alphanumeric(5),
