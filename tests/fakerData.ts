@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { CAR_REGISTRATION_NUMBER, CAR_ID_1, CAR_ID_2 } from "./carVariable";
+import { CAR_REGISTRATION_NUMBER, CAR_ID_1,CAR_ID_2 } from "./carVariable";
+
 import { Customer_ID_FIRST} from "./customerVariable";
 
 export const CreateCarWithExistringRegistrationNumber = () => {
@@ -52,8 +53,8 @@ export const UpdateCarWithNegativePrice = () => {
 
 export const generateFakerDataOrderCar = () => {
     return {
-        "userId": 1,
-        "carId": 2,
+        "userId": 3,
+        "carId": 3,
         "date": faker.date.past(), // '2021-12-03T05:40:44.408Z'
         "numberOfDays": faker.number.int({ min: 1, max: 255 }),
 
