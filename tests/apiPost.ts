@@ -1,3 +1,5 @@
+
+
 import { APIRequestContext } from "@playwright/test";
 
 export class APIPOST {
@@ -5,7 +7,7 @@ export class APIPOST {
     private ADD_CUSTOMER: string;
     private ORDER_CAR: string;
 
-    //private makes the get_all_customers property inaccessible from outside the class. 
+  
     constructor(ADD_CAR: string, ADD_CUSTOMER: string,ORDER_CAR:string) {
         this.ADD_CAR = ADD_CAR;
         this.ADD_CUSTOMER = ADD_CUSTOMER;
