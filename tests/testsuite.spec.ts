@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { ADD_CAR, ADD_CUSTOMER, GET_ALL_CUSTOMERS, UPDATE_CUSTOMER, ORDER_CAR, GET_ALL_CARS, DELETE_CAR,UPDATE_CAR } from './urlVariable';
+import { generateFakerDataOrderCar } from './fakerData';
+import { ADD_CAR, ADD_CUSTOMER, GET_ALL_CUSTOMERS, UPDATE_CUSTOMER, ORDER_CAR, GET_ALL_CARS, DELETE_CAR,UPDATE_CAR,WRONG_URL } from './urlVariable';
 import { APIGETS } from './apiGet';
 import { CreateCarWithExistringRegistrationNumber,UpdateCustomer, OrderCarFirstUser, OrderCarSecondUser,CreateCar, UpdateCarWithNegativePrice} from './fakerData';
 import { APIPOSTS } from './apiPost';
@@ -122,5 +123,31 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
     expect(responseuppdatecarnegativeprice.status()).toBe(400);
     expect(responseuppdatecarnegativeprice.status()).not.toBe(200);
   });
+  
+    test("Test case 08 delete car with wrong url", async ({ request }) => {
+
+    const responsedeletecar = await apiDelete.deleteCarWithWrongUrl(request);
+    expect(responsedeletecar.ok()).toBeFalsy();
+    expect(responsedeletecar.status()).toBe(405);
+  });
+
+  test("Test case 09", async ({ request }) => {
+
+    const responsedeletecar = await apiDelete.deleteCar(request);
+    expect(responsedeletecar.ok()).toBeFalsy();
+    expect(responsedeletecar.status()).toBe(404);
+    console.log(responsedeletecar);
+
+  });
+
+  test("Test case 10 ", async ({request}) =>{
+
+    const payload = generateFakerDataOrderCar();
+    const responsebookcar = await apiposts.orderCar(request,payload);
+    expect(responsebookcar.status()).toBe(400);
+    console.log(responsebookcar);
+   });
+  
+  
 });
 
