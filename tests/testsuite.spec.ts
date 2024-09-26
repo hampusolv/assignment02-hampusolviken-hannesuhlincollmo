@@ -3,19 +3,19 @@ import { generateFakerDataOrderCar } from './fakerData';
 import { ADD_CAR, ADD_CUSTOMER, GET_ALL_CUSTOMERS, UPDATE_CUSTOMER, ORDER_CAR, GET_ALL_CARS, DELETE_CAR,UPDATE_CAR,WRONG_URL } from './urlVariable';
 import { APIGETS } from './apiGet';
 import { CreateCarWithExistringRegistrationNumber,UpdateCustomer, OrderCarFirstUser, OrderCarSecondUser,CreateCar, UpdateCarWithNegativePrice} from './fakerData';
-import { APIPOSTS } from './apiPost';
+import { APIPOST } from './apiPost';
 import { APIPUTS } from './apiPut';
 import { APIDELETE } from './apiDelete';
 
 test.describe('Testsuite Hannes and Hampus Group', () => {
   let apigets: APIGETS;
-  let apiposts: APIPOSTS;
+  let apiposts: APIPOST;
   let apiputs: APIPUTS;
   let apiDelete: APIDELETE;
 
   test.beforeAll(async ({ }) => {
     apigets = new APIGETS(GET_ALL_CUSTOMERS, GET_ALL_CARS);
-    apiposts = new APIPOSTS(ADD_CAR, ADD_CUSTOMER, ORDER_CAR);
+    apiposts = new APIPOST(ADD_CAR, ADD_CUSTOMER, ORDER_CAR);
     apiputs = new APIPUTS(UPDATE_CUSTOMER,UPDATE_CAR);
     apiDelete = new APIDELETE(DELETE_CAR);
   })
