@@ -124,15 +124,13 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
     expect(responseuppdatecarnegativeprice.status()).not.toBe(200);
   });
   
-    test("Test case 08 delete car with wrong url", async ({ request }) => {
-
+  test("Test case 08 delete car with wrong url", async ({ request }) => {
     const responsedeletecar = await apiDelete.deleteCarWithWrongUrl(request);
     expect(responsedeletecar.ok()).toBeFalsy();
     expect(responsedeletecar.status()).toBe(405);
   });
 
-  test("Test case 09", async ({ request }) => {
-
+  test("Test case 09 delete a car that is allready gone", async ({ request }) => {
     const responsedeletecar = await apiDelete.deleteCar(request);
     expect(responsedeletecar.ok()).toBeFalsy();
     expect(responsedeletecar.status()).toBe(404);
@@ -140,13 +138,12 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
 
   });
 
-  test("Test case 10 ", async ({request}) =>{
-
+  test("Test case 10 order car with old date ", async ({request}) =>{
     const payload = generateFakerDataOrderCar();
     const responsebookcar = await apiposts.orderCar(request,payload);
     expect(responsebookcar.status()).toBe(400);
     console.log(responsebookcar);
-   });
+  });
   
   
 });
