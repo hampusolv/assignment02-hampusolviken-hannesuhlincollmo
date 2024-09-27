@@ -1,11 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { generateFakerDataOrderCar } from './fakerData';
-import { ADD_CAR, ADD_CUSTOMER, GET_ALL_CUSTOMERS, UPDATE_CUSTOMER, ORDER_CAR, GET_ALL_CARS, DELETE_CAR,UPDATE_CAR,WRONG_URL } from './urlVariable';
 import { APIGETS } from './apiGet';
-import { CreateCarWithExistringRegistrationNumber,UpdateCustomer, OrderCarFirstUser,CreateCar, UpdateCarWithNegativePrice} from './fakerData';
 import { APIPOST } from './apiPost';
 import { APIPUTS } from './apiPut';
 import { APIDELETE } from './apiDelete';
+import * as testUrls from './urlVariable';
+import * as fakerDataMetods from './fakerData';
 
 test.describe('Testsuite Hannes and Hampus Group', () => {
   let apigets: APIGETS;
@@ -14,10 +13,10 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
   let apiDelete: APIDELETE;
 
   test.beforeAll(async ({ }) => {
-    apigets = new APIGETS(GET_ALL_CUSTOMERS, GET_ALL_CARS);
-    apiposts = new APIPOST(ADD_CAR, ADD_CUSTOMER, ORDER_CAR);
-    apiputs = new APIPUTS(UPDATE_CUSTOMER,UPDATE_CAR);
-    apiDelete = new APIDELETE(DELETE_CAR,WRONG_URL);
+    apigets = new APIGETS(testUrls.GET_ALL_CUSTOMERS, testUrls.GET_ALL_CARS);
+    apiposts = new APIPOST(testUrls.ADD_CAR, testUrls.ADD_CUSTOMER, testUrls.ORDER_CAR);
+    apiputs = new APIPUTS(testUrls.UPDATE_CUSTOMER,testUrls.UPDATE_CAR);
+    apiDelete = new APIDELETE(testUrls.DELETE_CAR,testUrls.WRONG_URL);
   })
 
   test('Test case 01 find all customers', async ({ request }) => {
@@ -29,14 +28,14 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
   });
 
   test('Test case 02 add cars with a registration number that are in the database', async ({ request, }) => {
-    const payload = CreateCarWithExistringRegistrationNumber();
+    const payload = fakerDataMetods.CreateCarWithExistringRegistrationNumber();
     const responseCreateCar = await apiposts.addCAR(request, payload);
     expect(responseCreateCar.status()).not.toBe(201);
     expect(responseCreateCar.status()).toBe(409);
   });
 
   test('Test case 03 uppdate a customer and verify changes in customers list', async ({ request, }) => {
-    const payload = UpdateCustomer();
+    const payload = fakerDataMetods.UpdateCustomer();
     const responseUpdateCustomer = await apiputs.uppdateCustomer(request, payload);
     expect(await responseUpdateCustomer.json()).toMatchObject(
       expect.objectContaining({
@@ -72,7 +71,7 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
   });
 
   test('Test case 05 book a car that is allready booked get right messege from server', async ({ request, }) => {
-    const payload = OrderCarFirstUser();
+    const payload = fakerDataMetods.OrderCarFirstUser();
     const responseordecar = await apiposts.orderCar(request, payload);
     expect(responseordecar.status()).toBe(200);
     const responsemessage = await responseordecar.text();
@@ -81,7 +80,7 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
   });
 
   test('Test case 06 create car and take away car from car list', async ({ request }) => {
-    const payload = CreateCar();
+    const payload = fakerDataMetods.CreateCar();
     const responsecreateCar = await apiposts.addCAR(request, payload);
     expect(responsecreateCar.status()).toBe(201);
     expect(responsecreateCar.status()).not.toBe(400);
@@ -113,7 +112,7 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
     )
   });
   test('Test case 07 validate update car with negative price', async ({ request,}) => {
-    const payload = UpdateCarWithNegativePrice();
+    const payload = fakerDataMetods.UpdateCarWithNegativePrice();
     console.log(payload)
     const responseuppdatecarnegativeprice = await apiputs.uppdateCar (request,payload);
     expect(responseuppdatecarnegativeprice.status()).toBe(400);
@@ -135,7 +134,7 @@ test.describe('Testsuite Hannes and Hampus Group', () => {
   });
 
   test("Test case 10 order car with old date ", async ({request}) =>{
-    const payload = generateFakerDataOrderCar();
+    const payload = fakerDataMetods.OrderCar();
     const responsebookcar = await apiposts.orderCar(request,payload);
     expect(responsebookcar.status()).toBe(400);
     console.log(responsebookcar);

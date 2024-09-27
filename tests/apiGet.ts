@@ -1,9 +1,7 @@
 import { APIRequestContext } from "@playwright/test";
-
 export class APIGETS{
     private GET_ALL_CUSTOMERS: string;
     private GET_ALL_CARS: string;
-    //private makes the get_all_customers property inaccessible from outside the class. This means:
 
     constructor(GET_ALL_CUSTOMERS: string,GET_ALL_CARS:string){
         this.GET_ALL_CUSTOMERS = GET_ALL_CUSTOMERS;
@@ -11,6 +9,7 @@ export class APIGETS{
     }
 
    // BELOW ALL GET REQUESTS METODS
+
     async getAllCustomers(request: APIRequestContext) {
         const response = await request.get(`${this.GET_ALL_CUSTOMERS}`);
         return response;
@@ -19,9 +18,6 @@ export class APIGETS{
     async getAllCars(request: APIRequestContext) {
         const response = await request.get(`${this.GET_ALL_CARS}`);
         return response;
-    }
-
-
-   
+    } 
     
 }

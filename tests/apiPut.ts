@@ -1,5 +1,4 @@
 import { APIRequestContext } from "@playwright/test";
-
 export class APIPUTS {
     private UPDATE_CUSTOMER: string;
     private UPDATE_CAR:string;
@@ -11,12 +10,11 @@ export class APIPUTS {
     }
 
     // BELOW ALL PUTS REQUESTS METODS
+
     async uppdateCustomer(request: APIRequestContext,payload:object) {
         const response = await request.put(`${this.UPDATE_CUSTOMER}`, {
             headers: {
                 'Content-Type': 'application/json',
-                /* Ensure the server knows you're sending 
-                JSON must do oterwise you got 415 response from server*/
             },
             data: JSON.stringify(payload),
         })
@@ -27,18 +25,10 @@ export class APIPUTS {
         const response = await request.put(`${this.UPDATE_CAR}`, {
             headers: {
                 'Content-Type': 'application/json',
-                /* Ensure the server knows you're sending 
-                JSON must do oterwise you got 415 response from server*/
             },
             data: JSON.stringify(payload),
         })
         return response
     }
    
-
-
-    
-
-  
-
 }
